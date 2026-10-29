@@ -1,0 +1,61 @@
+class Musteri:
+    def __init__(self, ad, derman):
+        self.ad = ad
+        self.derman = derman
+
+
+class Node:
+    def __init__(self, musteri):
+        self.musteri = musteri
+        self.next = None
+
+
+class Novbe:
+    def __init__(self):
+        self.bas = None
+        self.son = None
+        self.say = 0
+
+    def elave_et(self, ad, derman):
+        yeni_musteri = Musteri(ad, derman)
+        yeni_node = Node(yeni_musteri)
+        if self.bas is None:
+            self.bas = self.son = yeni_node
+        else:
+            self.son.next = yeni_node
+            self.son = yeni_node
+        self.say += 1
+        print(f"{ad} növbəyə əlavə olundu")
+
+    def xidmet_et(self):
+        if self.bas is None:
+            print("Növbə boşdur, müştəri yoxdur")
+            return
+        cixan = self.bas
+        self.bas = self.bas.next
+        if self.bas is None:
+            self.son = None
+        self.say -= 1
+        musteri = cixan.musteri
+        print(f"{musteri.ad} adlı müştəriyə {musteri.derman} verildi")
+
+    def goster(self):
+        if self.bas is None:
+            print("Növbə boşdur")
+            return
+        cari = self.bas
+        sira = 1
+        while cari is not None:
+            print(f"{sira}. {cari.musteri.ad} - {cari.musteri.derman}")
+            cari = cari.next
+            sira += 1
+
+
+if __name__ == "__main__":
+    novbe = Novbe()
+    novbe.elave_et("Əli", "Aspirin")
+    novbe.elave_et("Aysel", "Paracetamol")
+    novbe.elave_et("Kamran", "Vitamin C")
+    novbe.goster()
+    novbe.xidmet_et()
+    novbe.goster()
