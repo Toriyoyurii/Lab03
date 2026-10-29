@@ -1,0 +1,98 @@
+class Sernisin:
+    def __init__(self, ad, yas):
+        self.ad = ad
+        self.yas = yas
+
+
+class Node:
+    def __init__(self, sernisin):
+        self.sernisin = sernisin
+        self.next = None
+
+
+class Novbe:
+    def __init__(self):
+        self.bas = None
+        self.son = None
+        self.say = 0
+
+    def bosdur(self):
+        return self.bas is None
+
+    def elave_et(self, sernisin):
+        yeni_node = Node(sernisin)
+        if self.bas is None:
+            self.bas = self.son = yeni_node
+        else:
+            self.son.next = yeni_node
+            self.son = yeni_node
+        self.say += 1
+
+    def cixar(self):
+        if self.bas is None:
+            return None
+        cixan = self.bas
+        self.bas = self.bas.next
+        if self.bas is None:
+            self.son = None
+        self.say -= 1
+        return cixan.sernisin
+
+    def goster(self):
+        if self.bas is None:
+            print("  (boşdur)")
+            return
+        cari = self.bas
+        sira = 1
+        while cari is not None:
+            print(f"  {sira}. {cari.sernisin.ad} ({cari.sernisin.yas} yaş)")
+            cari = cari.next
+            sira += 1
+
+
+class Dayanacaq:
+    YAS_HEDDI = 65
+
+    def __init__(self):
+        self.yaslilar_novbesi = Novbe()
+        self.normal_novbe = Novbe()
+
+    def elave_et(self, ad, yas):
+        if not isinstance(yas, int) or yas < 0 or yas > 120:
+            print("Daxil edilən yaş yanlışdır!")
+            return
+        sernisin = Sernisin(ad, yas)
+        if yas > Dayanacaq.YAS_HEDDI:
+            self.yaslilar_novbesi.elave_et(sernisin)
+            print(f"{ad} ({yas} yaş) yaşlılar növbəsinə əlavə olundu")
+        else:
+            self.normal_novbe.elave_et(sernisin)
+            print(f"{ad} ({yas} yaş) normal növbəyə əlavə olundu")
+
+    def avtobusa_min(self):
+        sernisin = self.yaslilar_novbesi.cixar()
+        if sernisin is None:
+            sernisin = self.normal_novbe.cixar()
+        if sernisin is None:
+            print("Dayanacaqda sərnişin yoxdur")
+            return
+        print(f"{sernisin.ad} ({sernisin.yas} yaş) avtobusa mindi")
+
+    def goster(self):
+        print("Yaşlılar növbəsi:")
+        self.yaslilar_novbesi.goster()
+        print("Normal növbə:")
+        self.normal_novbe.goster()
+
+
+if __name__ == "__main__":
+    dayanacaq = Dayanacaq()
+    dayanacaq.elave_et("Əli", 30)
+    dayanacaq.elave_et("Aysel", 25)
+    dayanacaq.elave_et("Nəriman", 68)
+    dayanacaq.elave_et("Fəridə", 70)
+    dayanacaq.goster()
+    dayanacaq.avtobusa_min()
+    dayanacaq.avtobusa_min()
+    dayanacaq.avtobusa_min()
+    dayanacaq.goster()
